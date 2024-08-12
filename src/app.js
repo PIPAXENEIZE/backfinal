@@ -1,13 +1,15 @@
 import express from 'express';
 import { engine } from 'express-handlebars';
 import mongoose from 'mongoose';
-import cookieParser from 'cookie-parser';
 import __dirname from './utils.js';
+import passport from 'passport';
+import cookieParser from 'cookie-parser';
 import { Server } from 'socket.io';
 import sessionsRouter from './routes/sessions.router.js';
 import ProductsRouter from './routes/products.router.js'
 import viewsRouter from './routes/views.router.js'
 import CartRouter from './routes/cart.router.js';
+import initializePassportConfig from './config/passport.config.js'
 
 
 const app = express();
@@ -21,11 +23,15 @@ app.engine('handlebars', engine({
         allowProtoMethodsByDefault: true
     }
 }));
-app.use(express.urlencoded({extended:true}));
-app.use(cookieParser());
+
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'handlebars');
+app.use(express.urlencoded({extended:true}));
 app.use(express.json());
+app.use(cookieParser());
+
+initializePassportConfig();
+app.use(passport.initialize());
 
 app.use('/', viewsRouter);
 app.use('/api/sessions',sessionsRouter);
