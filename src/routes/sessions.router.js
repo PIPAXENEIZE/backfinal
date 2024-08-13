@@ -1,10 +1,11 @@
 import { Router } from "express";
 import passport from 'passport'
 import jwt from 'jsonwebtoken'
+import { passportCall } from '../middlewares/passportCall.js'
 
 const sessionsRouter = Router();
 
-sessionsRouter.post('/register', passport.authenticate('register',{failureRedirect:'/api/sessions/registerFail', failureMessage:true,session:false}),async (req,res)=>{
+sessionsRouter.post('/register', passportCall('register'),async (req,res)=>{
     res.send({status:"success",message:"registered"})
 })
 
@@ -13,8 +14,8 @@ sessionsRouter.get('/registerFail', (req,res)=>{
     res.send("no se ha podido registrar")
 })
 
-sessionsRouter.post('/login', passport.authenticate('login',{failureRedirect:'/api/sessions/failureLogin', failureMessage:true,session:false}), async(req,res)=>{
-    console.log(req.user)
+sessionsRouter.post('/login', passportCall('login'), async(req,res)=>{
+    console.log(req.user);
     const sessionUser = {
         name: `${req.user.firstName} ${req.user.lastName}`,
         role:req.user.role,
@@ -24,7 +25,7 @@ sessionsRouter.post('/login', passport.authenticate('login',{failureRedirect:'/a
         id:req.user._id
     }
     const token = jwt.sign(sessionUser, 'SecretXENEIZE', {expiresIn:'1d'})
-    res.cookie('tokenID', token).send({ status: "success", message: "logged in", redirectUrl: "/profile" });
+    res.cookie('tokenID', token).send({ status: "success", message: "logged in" });
 })
 
 sessionsRouter.get('/failureLogin',(req,res)=>{

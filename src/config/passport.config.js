@@ -1,25 +1,23 @@
 import passport from "passport";
 import { usersService } from "../managers/index.js";
 import AuthService from "../services/AuthService.js";
-import usersModel from '../managers/mongo/user.model.js';  // Asegúrate de importar el modelo
+import usersModel from '../managers/mongo/user.model.js';
 import { Strategy as LocalStrategy } from "passport-local";
 import { ExtractJwt, Strategy as JWTStrategy} from "passport-jwt";
-
-// const LocalStrategy = local.Strategy;
 
 const initializePassportConfig = () => {
     passport.use('register', new LocalStrategy({ usernameField: 'email', passReqToCallback: true }, async (req, email, password, done) => {
         const { firstName, lastName, dateOfBirth } = req.body;
         if (!firstName || !lastName) {
-            return done(null, false, { message: 'Incomplete values' });
+            return done(null,false,{message: 'Incomplete values' });
         }
         const user = await usersService.getUserByEmail(email);
         if (user) {
-            return done(null, false, { message: "User already exists" });
+            return done(null,false,{message: "User already exists" });
         }
 
         if (!dateOfBirth) {
-            return done(null, false, { message: 'dateOfBirth is required' });
+            return done(null, false, {message: 'dateOfBirth is required' });
         }
 
         const authService = new AuthService();
