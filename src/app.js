@@ -5,16 +5,16 @@ import __dirname from './utils.js';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import { Server } from 'socket.io';
-import sessionsRouter from './routes/sessions.router.js';
+import sessionsRouter from './routes/SessionsRouter.js';
 import ProductsRouter from './routes/products.router.js'
-import viewsRouter from './routes/views.router.js'
+import viewsRouter from './routes/ViewsRouter.js'
 import CartRouter from './routes/cart.router.js';
 import initializePassportConfig from './config/passport.config.js'
-
+import config from './config/config.js';
 
 const app = express();
-const PORT = process.env.PORT || 8080;
-const connection = mongoose.connect('mongodb+srv://codertest:coder@coder.rhkkhfv.mongodb.net/college?retryWrites=true&w=majority&appName=Coder')
+const PORT = config.app.PORT
+const connection = mongoose.connect(config.mongo.URL)
 
 app.engine('handlebars', engine({
     defaultLayout: 'main',
@@ -23,6 +23,7 @@ app.engine('handlebars', engine({
         allowProtoMethodsByDefault: true
     }
 }));
+
 
 app.set('views', `${__dirname}/views`);
 app.set('view engine', 'handlebars');
@@ -35,7 +36,7 @@ app.use(passport.initialize());
 
 app.use('/', viewsRouter);
 app.use('/api/sessions',sessionsRouter);
-app.use('/products', ProductsRouter)
+app.use('/api/products', ProductsRouter)
 app.use('/api/cart', CartRouter);
 
 app.use(express.static(`${__dirname}/public`)); // colocarlo luego para evitar conflicos con el index.html 

@@ -1,4 +1,4 @@
-import Product from '../managers/mongo/products.testeo.js';
+import Product from '../db/managers/mongo/products.testeo.js';
 
 const getProducts = async (req,res) => {
     const products = await Product.find();

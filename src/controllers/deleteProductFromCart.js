@@ -1,5 +1,5 @@
-import Cart from '../managers/mongo/cart.testeo.js';
-import Product from '../managers/mongo/products.testeo.js';
+import Cart from '../db/managers/mongo/cart.testeo.js';
+import Product from '../db/managers/mongo/products.testeo.js';
 
 const deleteProductFromCart = async (req, res) => {
     const { cartId, productId } = req.params;

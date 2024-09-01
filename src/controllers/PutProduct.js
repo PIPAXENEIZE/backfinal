@@ -1,4 +1,4 @@
-import Cart from '../managers/mongo/cart.testeo.js'
+import Cart from '../db/managers/mongo/cart.testeo.js'
 
 const putProduct = async (req, res) => {
   const { productId } = req.params;

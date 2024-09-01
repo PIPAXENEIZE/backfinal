@@ -1,7 +1,7 @@
 import passport from "passport";
-import { usersService } from "../managers/index.js";
+import { usersService } from "../db/managers/index.js";
 import AuthService from "../services/AuthService.js";
-import usersModel from '../managers/mongo/user.model.js';
+import usersModel from '../db/managers/mongo/user.model.js';
 import { Strategy as LocalStrategy } from "passport-local";
 import { ExtractJwt, Strategy as JWTStrategy} from "passport-jwt";
 
