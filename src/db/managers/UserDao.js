@@ -1,18 +1,20 @@
 import usersModel from "./mongo/user.model.js";
 
-export default class UserManager {
+export default class UserDao {
 
-    getUsers(){
+    get(){
         return usersModel.find();
     }
-
-    getUserById(userId){
+    getOne(params) {
+        return usersModel.findOne(params);
+    }
+    getById(userId){
         return usersModel.findById(userId)
     }
-    getUserByEmail(userEmail){
+    getByEmail(userEmail){
         return usersModel.findOne({email:userEmail});
     }
-    createUser(user){
+    create(user){
         return usersModel.create(user);
     }
 }

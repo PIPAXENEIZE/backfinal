@@ -11,7 +11,7 @@ class SessionsRouter extends BaseRouter {
         this.get('/failureLogin', ['PUBLIC'], sessionController.failureLogin)
         this.get('/logout', ['PUBLIC'], sessionController.logout)
 
-        this.get('/current', ['USER'], sessionController.current)
+        this.get('/current', ['PUBLIC'], sessionController.current)
     }
 }
 

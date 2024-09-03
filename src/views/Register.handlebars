@@ -4,32 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro</title>
-    <link rel="stylesheet" href="/css/login.css"> <!-- Enlace al CSS -->
+    <link rel="stylesheet" href="/css/login.css">
 </head>
 <body>
     <h1>Regístrate</h1>
 
     <form id="registerForm">
         <label>Nombre</label>
-        <input class="styled-input" name="firstName">
+        <input class="styled-input" name="firstName" required>
         <br/>
         <label>Apellido</label>
-        <input class="styled-input" name="lastName">
+        <input class="styled-input" name="lastName" required>
         <br/>
         <label>Email</label>
-        <input class="styled-input" name="email">
+        <input class="styled-input" name="email" required>
         <br/>
         <label>Fecha de nacimiento</label>
-        <input class="styled-input" type="date" name="dateOfBirth">
+        <input class="styled-input" type="date" name="dateOfBirth" required>
         <br/>
         <label>Contraseña</label>
-        <input class="styled-input" name="password" type="password">
+        <input class="styled-input" name="password" type="password" required>
         <br/>
         <br>
         <input class="formButton" type="submit" value="Registrarse">
-        <input id="login" class="formButton" value="Iniciar Sesion"
+        <input id="login" class="formButton" value="Iniciar Sesion">
     </form>
     <br>
+    <div id="messageContainer"></div> <!-- Contenedor para mensajes -->
 
     <script src="/js/register.js"></script>
     <script>

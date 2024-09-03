@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+import UserDtoSession from '../dto/user/UserDtoSession.js'
 
 const register = (req, res) => {
     res.sendSuccess("Registered")
@@ -12,15 +13,8 @@ const login = (req, res) =>{
         return res.status(400).send({ status: "error", message: "Invalid credentials" });
     }
     console.log(req.user);
-    const sessionUser = {
-        name: `${req.user.firstName} ${req.user.lastName}`,
-        role:req.user.role,
-        email: req.user.email,
-        age: req.user.age,
-        registrationDate: req.user.registrationYear,
-        id:req.user._id
-    }
-    const token = jwt.sign(sessionUser, 'SecretXENEIZE', {expiresIn:'1d'})
+    const sessionUser = new UserDtoSession(req.user);
+    const token = jwt.sign(sessionUser.toPlainObject(), 'SecretXENEIZE', {expiresIn:'1d'})
     res.cookie('tokenID', token).send({ status: "success", message: "logged in" });
 }
 

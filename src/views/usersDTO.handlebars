@@ -1,0 +1,26 @@
+<!-- views/users.handlebars -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LISTA DE USUARIOS PARSEADA</title>
+    <style>
+        .user-item {
+            margin-bottom: 2em; /* Espacio de 2 líneas entre usuarios */
+        }
+    </style>
+</head>
+<body>
+    <h1>LISTA DE USUARIOS PARSEADA</h1>
+    <ul>
+        {{#each users}}
+            <li class="user-item">
+                <div>{{name}}</div>
+                <div>Email: {{email}}</div>
+                <div>Edad: {{age}}</div>
+            </li>
+        {{/each}}
+    </ul>
+</body>
+</html>

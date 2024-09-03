@@ -11,6 +11,7 @@ import viewsRouter from './routes/ViewsRouter.js'
 import CartRouter from './routes/cart.router.js';
 import initializePassportConfig from './config/passport.config.js'
 import config from './config/config.js';
+import { getUsers } from './controllers/users.controller.js';
 
 const app = express();
 const PORT = config.app.PORT
@@ -38,6 +39,7 @@ app.use('/', viewsRouter);
 app.use('/api/sessions',sessionsRouter);
 app.use('/api/products', ProductsRouter)
 app.use('/api/cart', CartRouter);
+app.get('/current', getUsers);
 
 app.use(express.static(`${__dirname}/public`)); // colocarlo luego para evitar conflicos con el index.html 
 
