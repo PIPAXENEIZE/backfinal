@@ -1,28 +1,31 @@
-import { Router } from "express";
-import jwt from 'jsonwebtoken';
-import __dirname from "../utils.js"; // Importar __dirname desde utils.js
-import productModel from "../db/managers/mongo/products.testeo.js";
+import productsController from '../controllers/products.controller.js';
+import BaseRouter from './BaseRouter.js';
+import { authRoles } from '../middlewares/authroles.js';
 
-const router = Router();
-
-// obtiene los productos
-
-
-// Ruta para agregar un nuevo producto
-router.post('/', async (req, res) => {
-    const body = req.body;
-    const newProduct = {
-        title: body.title,
-        description: body.description,
-        code: body.code,
-        price: body.price,
-        quantity: body.quantity,
-        category: body.category,
-        status: body.status
+class ProductRouter extends BaseRouter {
+    init() {
+        this.get('/', ['PUBLIC'], productsController.getProducts);
+        this.get('/:id', ['PUBLIC'], productsController.getProductById);
+        this.post(
+            '/',
+            ['ADMIN'],
+            authRoles(['ADMIN']),
+            productsController.createProduct
+        );
+        this.put(
+            '/:id',
+            ['ADMIN'],
+            authRoles(['ADMIN']),
+            productsController.updateProduct
+        );
+        this.delete(
+            '/:id',
+            ['ADMIN'],
+            authRoles(['ADMIN']),
+            productsController.deleteProduct
+        );
     }
-    const result = await productModel.create(newProduct);
-    res.sendStatus(200);
-})
+}
 
-export default router;
-
+const productsRouter = new ProductRouter();
+export default productsRouter.getRouter();

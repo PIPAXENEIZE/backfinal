@@ -8,10 +8,10 @@ import { Server } from 'socket.io';
 import sessionsRouter from './routes/SessionsRouter.js';
 import ProductsRouter from './routes/products.router.js'
 import viewsRouter from './routes/ViewsRouter.js'
-import CartRouter from './routes/cart.router.js';
 import initializePassportConfig from './config/passport.config.js'
 import config from './config/config.js';
 import { getUsers } from './controllers/users.controller.js';
+import cartsRouter from './routes/CartsRouter.js'
 
 const app = express();
 const PORT = config.app.PORT
@@ -38,10 +38,14 @@ app.use(passport.initialize());
 app.use('/', viewsRouter);
 app.use('/api/sessions',sessionsRouter);
 app.use('/api/products', ProductsRouter)
-app.use('/api/cart', CartRouter);
+app.use('/api/carts', cartsRouter);
 app.get('/current', getUsers);
 
+
 app.use(express.static(`${__dirname}/public`)); // colocarlo luego para evitar conflicos con el index.html 
+app.use('*', (req, res) => {
+    res.status(404).render('404');  
+});
 
 const server = app.listen(PORT, () => console.log(`listening on ${PORT}`));
 const socketServer = new Server(server);

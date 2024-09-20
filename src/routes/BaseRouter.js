@@ -32,11 +32,16 @@ export default class BaseRouter {
         this.router.delete(path,this.generateCustomResponses,passportCall('current'),executePolicies(policies),this.applyCallbacks(callbacks));
     }
 
-    generateCustomResponses(req,res,next){
-        res.sendSuccess = (message) => res.status(200).send({status:"success",message});
-        res.sendBadRequest = (reason) => res.status(400).send({status:"success",error:reason});
-        res.sendUnauthorized = (reason) => res.status(401).send({status:"error",error:reason||"Unauthorized"})
-        res.sendFailed = (reason) => res.status(401).send({status:"error",error:reason||"Failed"})
+    generateCustomResponses(req, res, next) {
+        res.sendSuccess = (message) => res.status(200).send({ status: "success", message });
+        res.sendBadRequest = (reason) => res.status(400).send({ status: "error", error: reason });
+        res.sendUnauthorized = (reason) => res.status(401).send({ status: "error", error: reason || "Unauthorized" });
+        res.sendNotFound = (reason) => res.status(404).send({ status: "error", error: reason || "Not Found" });
+        res.sendForbidden = (reason) => res.status(403).send({ status: "error", error: reason || "Forbidden" });
+        res.sendMethodNotAllowed = (reason) => res.status(405).send({ status: "error", error: reason || "Method Not Allowed" });
+        res.sendConflict = (reason) => res.status(409).send({ status: "error", error: reason || "Conflict" });
+        res.sendServerError = (reason) => res.status(500).send({ status: "error", error: reason || "Internal Server Error" });
+        res.sendRedirect = (url) => res.redirect(302, url);
         next();
     }
 

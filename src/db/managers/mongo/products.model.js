@@ -1,24 +1,21 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 import mongoosePaginate from 'mongoose-paginate-v2';
 
-const collection = "productslistss";
+const collection = 'products';
+
+const thumbnailSchema = new mongoose.Schema({
+  mimetype: String,
+  path: String,
+  main: Boolean,
+});
 
 const schema = new mongoose.Schema({
-    title: String,
-    description: String,
-    code: String,
-    price: Number,
-    quantity: Number,
-    category: String,
-    status: String,
-    carrito: [
-        {
-            product: {
-                type: mongoose.SchemaTypes.ObjectId,
-                ref: 'cart'
-            }
-        }
-    ]
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  price: { type: Number, required: true },
+  stock: { type: Number, required: true },
+  category: { type: String, required: true },
+  thumbnails: [thumbnailSchema],
 });
 
 schema.plugin(mongoosePaginate);

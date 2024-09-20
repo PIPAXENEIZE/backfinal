@@ -1,0 +1,93 @@
+{{!< main}}
+<h1>Mi Carrito</h1>
+<div class="container">
+    {{#if cart.products.length}}
+    <table>
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each cart.products}}
+            <tr>
+                <td>
+                    <img src="{{this.product.img}}" alt="{{this.product.title}}" width="100" /> <!-- Muestra la imagen -->
+                </td>
+                <td>{{this.product.title}}</td>
+                <td>${{this.product.price}}</td>
+                <td>{{this.quantity}}</td>
+                <td>${{this.subtotal}}</td> <!-- Usa el subtotal calculado -->
+                <td>
+                    <button class="remove-btn" data-cart-id="{{../cart._id}}" data-product-id="{{this.product._id}}">Eliminar</button>
+                    <input type="number" class="quantity-input" data-cart-id="{{../cart._id}}" data-product-id="{{this.product._id}}" value="{{this.quantity}}" min="1" />
+                    <button class="update-btn" data-cart-id="{{../cart._id}}" data-product-id="{{this.product._id}}">Actualizar Cantidad</button>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    <form action="/carts/{{cart._id}}/purchase" method="post">
+        <button type="submit">Finalizar Compra</button>
+    </form>
+    {{else}}
+    <p>El carrito está vacío.</p>
+    {{/if}}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const removeButtons = document.querySelectorAll('.remove-btn');
+    const updateButtons = document.querySelectorAll('.update-btn');
+    
+    removeButtons.forEach(button => {
+        button.addEventListener('click', async (event) => {
+            const cartId = event.target.getAttribute('data-cart-id');
+            const productId = event.target.getAttribute('data-product-id');
+            
+            try {
+                const response = await fetch(`/api/carts/${cartId}/products/${productId}`, {
+                    method: 'DELETE',
+                });
+                if (response.ok) {
+                    location.reload(); // Recarga la página para reflejar los cambios
+                } else {
+                    console.error('Error al eliminar el producto');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    });
+    
+    updateButtons.forEach(button => {
+        button.addEventListener('click', async (event) => {
+            const cartId = event.target.getAttribute('data-cart-id');
+            const productId = event.target.getAttribute('data-product-id');
+            const quantityInput = document.querySelector(`.quantity-input[data-cart-id="${cartId}"][data-product-id="${productId}"]`);
+            const quantity = quantityInput.value;
+            
+            try {
+                const response = await fetch(`/carts/${cartId}/products/${productId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ quantity }),
+                });
+                if (response.ok) {
+                    location.reload(); // Recarga la página para reflejar los cambios
+                } else {
+                    console.error('Error al actualizar la cantidad');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    });
+});
+</script>
