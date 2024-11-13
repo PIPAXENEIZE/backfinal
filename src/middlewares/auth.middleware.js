@@ -1,21 +1,22 @@
 import jwt from 'jsonwebtoken';
+import { logger, addLogger } from './loggers.js';
 
 export const authMiddleware = (req, res, next) => {
     const token = req.headers['authorization']?.split(' ')[1];
-    console.log('Token received:', token);
+    logger.info('Token received:', token);
 
     if (!token) {
-        console.log('Token not found');
+        logger.warn('Token not found');
         return res.status(401).json({ status: 'error', message: 'Access denied' });
     }
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        console.log('Decoded token:', decoded);
+        logger.info('Decoded token:', decoded);
         req.user = decoded;
         next();
     } catch (error) {
-        console.error('JWT verification error:', error);
+        logger.warn('JWT verification error:', error);
         res.status(401).json({ status: 'error', message: 'Access denied' });
     }
 };

@@ -3,12 +3,13 @@ import path from 'path';
 import __dirname from '../utils.js';
 import productModel from "../db/managers/mongo/products.model.js";
 import cartModel from "../db/managers/mongo/cart.model.js";
+import { logger, addLogger } from "../middlewares/loggers.js";
 
 
 class ViewsRouter extends BaseRouter {
     init(){
         this.get('/',['PUBLIC'],(req,res)=>{
-            res.render("Home");
+            res.render("home");
         })
         this.get('/home',['USER'],(req,res)=>{
             res.sendFile(path.join(__dirname, './public/index.html'));
@@ -20,7 +21,7 @@ class ViewsRouter extends BaseRouter {
             res.render('Login');
         })
         this.get('/profile',['USER'],(req,res)=>{
-            console.log(req.user);
+            logger.debug(req.user);
             if(!req.user){
                 return res.redirect('/login')
             }
@@ -93,7 +94,7 @@ class ViewsRouter extends BaseRouter {
                 const hasPrevPage = page > 1;
                 const nextPage = hasNextPage ? page + 1 : null;
                 const prevPage = hasPrevPage ? page - 1 : null;
-                console.log('User cartId:', req.user ? req.user.cartId : 'No cartId');
+                logger.info('User cartId:', req.user ? req.user.cartId : 'No cartId');
 
                 res.render('Products', {
                     products,

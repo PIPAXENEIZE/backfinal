@@ -1,4 +1,4 @@
-import CartDAO from "../db/dao/CartDAO.js";
+import CartDAO from "../db/dao/cartDAO.js";
 
 export class CartRepository {
     constructor() {

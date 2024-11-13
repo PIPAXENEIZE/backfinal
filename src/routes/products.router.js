@@ -1,6 +1,6 @@
 import productsController from '../controllers/products.controller.js';
 import BaseRouter from './BaseRouter.js';
-import { authRoles } from '../middlewares/authroles.js';
+import { authRoles } from '../middlewares/authRoles.js';
 
 class ProductRouter extends BaseRouter {
     init() {

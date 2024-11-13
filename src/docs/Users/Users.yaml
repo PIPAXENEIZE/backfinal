@@ -1,0 +1,44 @@
+paths:
+  /current/:
+    get:
+      summary: Obtiene Usuarios de current
+      tags:
+        - Users
+      responses: 
+        "200":
+          description: get de usuarios obtenido correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        "500":
+          description: error interno del servidor. usualmente por query defectuoso
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Id autogenerado de mongo
+        first_name:
+          type: string
+          description: Nombre del usuario
+        last_name:
+          type: string
+          description: Apellido del usuario
+        email:
+          type: string
+          description: Email del usuario
+        password:
+          type: string
+          description: Password del usuario
+      required:
+        - _id
+        - first_name
+        - last_name
+        - email
+        - password

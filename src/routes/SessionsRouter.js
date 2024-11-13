@@ -4,6 +4,7 @@ import sessionController from '../controllers/sessionController.js';
 
 class SessionsRouter extends BaseRouter {
     init(){
+        this.get('/', ['USER'])
         this.post('/register',['PUBLIC'],passportCall('register'), sessionController.register)
         this.get('/registerFail',['PUBLIC'], sessionController.registerFail)
 

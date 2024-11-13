@@ -4,6 +4,7 @@ import cartServices from '../services/cartServices.js';
 import ticketsService from '../services/ticketService.js';
 import { usersService } from '../services/services.js';
 import mongoose from 'mongoose';
+import { logger, addLogger } from '../middlewares/loggers.js';
 
 const getAllCarts = async (req, res) => {
     try {
@@ -42,9 +43,9 @@ const addProductToCart = async (req, res) => {
     const { cid, pid } = req.params;
     const { quantity } = req.body;
 
-    console.log('Carrito ID (cid):', cid);
-    console.log('Producto ID (pid):', pid);
-    console.log('Cantidad solicitada:', quantity);
+    logger.info('Carrito ID (cid):', cid);
+    logger.info('Producto ID (pid):', pid);
+    logger.info('Cantidad solicitada:', quantity);
 
     try {
         if (
@@ -65,11 +66,11 @@ const addProductToCart = async (req, res) => {
         }
 
         const cart = await cartServices.getCartById(new mongoose.Types.ObjectId(cid));
-        console.log('Carrito encontrado:', cart);
+        logger.info('Carrito encontrado:', cart);
 
         const product = await productsService.findById(new mongoose.Types.ObjectId(pid));
-        console.log('Producto encontrado:', product);
-        console.log('Stock disponible del producto:', product ? product.stock : 'Producto no encontrado');
+        logger.info('Producto encontrado:', product);
+        logger.info('Stock disponible del producto:', product ? product.stock : 'Producto no encontrado');
 
         if (!cart) {
             return res.status(404).json({ status: 'error', message: 'Cart not found' });
@@ -82,12 +83,12 @@ const addProductToCart = async (req, res) => {
         const existingProductInCart = cart.products.find(
             (p) => p.product.toString() === pid.toString()
         );
-        console.log('Producto existente en el carrito:', existingProductInCart);
+        logger.info('Producto existente en el carrito:', existingProductInCart);
         const quantityInCart = existingProductInCart ? existingProductInCart.quantity : 0;
-        console.log('Cantidad existente en el carrito:', quantityInCart);
+        logger.info('Cantidad existente en el carrito:', quantityInCart);
 
         const availableStock = product.stock - quantityInCart;
-        console.log('Stock disponible después de considerar el carrito:', availableStock);
+        logger.info('Stock disponible después de considerar el carrito:', availableStock);
 
         if (quantity > availableStock) {
             return res.status(400).json({
@@ -105,17 +106,17 @@ const addProductToCart = async (req, res) => {
             });
         }
 
-        console.log('Actualizando el carrito...');
+        logger.info('Actualizando el carrito...');
         await cart.save();
-        console.log('Carrito actualizado:', cart);
+        logger.info('Carrito actualizado:', cart);
 
-        console.log('Actualizando el stock del producto...');
+        logger.info('Actualizando el stock del producto...');
         product.stock -= quantity;
         await product.save();
-        console.log('Stock del producto después de la actualización:', product.stock);
+        logger.info('Stock del producto después de la actualización:', product.stock);
 
         const updatedCart = await cartServices.getCartById(cid);
-        console.log('Carrito actualizado:', updatedCart);
+        logger.info('Carrito actualizado:', updatedCart);
 
         res.status(200).json({
             status: 'success',
@@ -123,7 +124,7 @@ const addProductToCart = async (req, res) => {
             cart: updatedCart,
         });
     } catch (error) {
-        console.error('Error agregando producto al carrito:', error);
+        logger.error('Error agregando producto al carrito:', error);
         res.status(500).json({ status: 'error', message: error.message });
     }
 };
@@ -265,7 +266,7 @@ const purchaseCart = async (req, res) => {
 
         for (const item of cartProducts) {
             const product = await productsService.findById(item.product);
-            console.log(product.stock);
+            logger.info(product.stock);
 
             if (!product) {
                 outOfStock.push({
@@ -331,7 +332,7 @@ const purchaseCart = async (req, res) => {
                         stockItem.id.toString() === item.product.toString()
                 )
         );
-        console.log(remainingProducts);
+        logger.info(remainingProducts);
         await cartServices.updateCartProducts(cartId, remainingProducts);
 
         res.status(201).json({

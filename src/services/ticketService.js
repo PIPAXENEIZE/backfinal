@@ -1,4 +1,4 @@
-import TicketRepository from '../repositories/TicketRepository.js';
+import TicketRepository from '../repositories/ticketRepository.js';
 
 class TicketService {
     constructor() {

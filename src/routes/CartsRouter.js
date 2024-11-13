@@ -1,6 +1,6 @@
 import BaseRouter from './BaseRouter.js';
 import cartsController from '../controllers/carts.controller.js';
-import { authRoles } from '../middlewares/authroles.js';
+import { authRoles } from '../middlewares/authRoles.js';
 import { authMiddleware } from '../middlewares/auth.middleware.js';
 
 class CartsRouter extends BaseRouter {

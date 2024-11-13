@@ -2,6 +2,7 @@ import { config } from 'dotenv';
 import { Command } from 'commander';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
+import { logger, addLogger } from '../middlewares/loggers.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -13,9 +14,9 @@ program.parse();
 const options = program.opts();
 
 // Construye la ruta del archivo .env usando __dirname y path.resolve
-const envPath = resolve(__dirname, options.mode === 'dev' ? '../.env.dev' : options.mode === 'stg' ? '../.env.stg' : '../.env.prod');
+const envPath = resolve(__dirname, options.mode === 'dev' ? '../../.env.dev' : options.mode === 'stg' ? '../.env.stg' : '../.env.prod');
 
-console.log(`Loading environment file from: ${envPath}`); // Muestra la ruta completa que se está intentando cargar
+logger.info(`Loading environment file from: ${envPath}`); // Muestra la ruta completa que se está intentando cargar
 
 config({
     path: envPath,
@@ -23,9 +24,9 @@ config({
 
 // Verifica que se haya cargado la url del .env (no verifica la conexion)
 if (process.env.MONGO_URL) {
-    console.log('Mongo Url upload to environment: Ok');
+    logger.info('Mongo Url upload to environment: Ok');
 } else {
-    console.log('Mongo Url upload to environment: Failed');
+    logger.fatal('Mongo Url upload to environment: Failed');
 }
 
 export default {

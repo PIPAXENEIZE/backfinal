@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { passportCall } from "../middlewares/passportCall.js";
 import { executePolicies } from "../middlewares/policies.js";
+import { logger, addLogger } from "../middlewares/loggers.js";
 
 export default class BaseRouter {
 
@@ -51,7 +52,7 @@ export default class BaseRouter {
             try{
                 await callback.apply(this,params);
             }catch(error){
-                console.log(error);
+                logger.fatal(error);
                 params[1].status(500).send({status:"error",error:`${error.name} ${error.message}`});
             }
         })
