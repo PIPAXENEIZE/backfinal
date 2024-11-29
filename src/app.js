@@ -17,6 +17,7 @@ import { logger, addLogger, setLoggingEnabled } from './middlewares/loggers.js';
 import { startCheck } from './services/clientFakeServices.js';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUiExpress from 'swagger-ui-express'
+import usersRouter from './routes/UserRouter.js'
 
 const app = express();
 const PORT = config.app.PORT
@@ -60,6 +61,8 @@ app.use('/', viewsRouter);
 app.use('/api/sessions',sessionsRouter);
 app.use('/api/products', ProductsRouter)
 app.use('/api/carts', cartsRouter);
+app.use('/api/users', usersRouter)
+
 app.get('/current', getUsers);
 
 
