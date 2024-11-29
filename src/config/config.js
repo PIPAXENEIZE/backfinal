@@ -14,7 +14,7 @@ program.parse();
 const options = program.opts();
 
 // Construye la ruta del archivo .env usando __dirname y path.resolve
-const envPath = resolve(__dirname, options.mode === 'dev' ? '../../.env.dev' : options.mode === 'stg' ? '../.env.stg' : '../.env.prod');
+const envPath = resolve(__dirname, options.mode === 'dev' ? '../../.env.dev' : options.mode === 'stg' ? '../../.env.stg' : '../../.env.prod');
 
 logger.info(`Loading environment file from: ${envPath}`); // Muestra la ruta completa que se está intentando cargar
 
